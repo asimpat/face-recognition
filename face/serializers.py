@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User, Face
+from django.contrib.auth import authenticate
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -56,3 +57,22 @@ class UserDetailSerializer(serializers.ModelSerializer):
             "phone",
             "face",
         )
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        email = attrs.get("email")
+        password = attrs.get("password")
+        user = authenticate(email=email, password=password)
+
+        if user is None:
+            raise serializers.ValidationError(
+                {"detail": "Invalid email or password."})
+        if not user.is_active:
+            raise serializers.ValidationError(
+                {"detail": "User account is inactive."})
+
+        attrs["user"] = user
+        return attrs
