@@ -46,7 +46,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f"{self.full_name}"
 
-
 # FACE MODEL
 class Face(models.Model):
     user = models.OneToOneField(
