@@ -48,3 +48,4 @@ class LoginView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
