@@ -26,7 +26,6 @@ class SignupView(APIView):
             status=status.HTTP_201_CREATED,
         )
 
-
 # LOGIN VIEW
 class LoginView(APIView):
     def post(self, request):
