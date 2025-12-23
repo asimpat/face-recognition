@@ -84,6 +84,7 @@ class FaceVerifyView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+
         # TODO: Face recognition logic here
         # For now, we'll simulate a match
         match = True
