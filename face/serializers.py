@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User, Face
 from django.contrib.auth import authenticate
+from django.core.files.images import get_image_dimensions
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -76,3 +77,21 @@ class LoginSerializer(serializers.Serializer):
 
         attrs["user"] = user
         return attrs
+    
+
+class FaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Face
+        fields = ["id", "image", "enrolled_at"]
+        read_only_fields = ["id", "enrolled_at"]
+        
+    
+class FaceVerifySerializer(serializers.Serializer):
+    image = serializers.ImageField()
+
+def validate_image(self, value):
+    # Optional: validate image size or dimensions
+    width, height = get_image_dimensions(value)
+    if width < 100 or height < 100:
+        raise serializers.ValidationError("Image is too small")
+    return value
